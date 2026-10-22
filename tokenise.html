@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RWA Tokenization Architecture & Strategy | India & Global</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Custom styling for Chart Containers and smooth transitions -->
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 320px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 360px;
+            }
+        }
+        .tab-active {
+            border-bottom: 3px solid #059669;
+            color: #059669;
+            font-weight: 700;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 font-sans antialiased leading-relaxed min-h-screen flex flex-col">
+
+    <!-- Chosen Palette: Slate & Emerald (Deep Slate Navy, Off-White Background, Emerald Accent, Indigo Sub-highlights) -->
+    <!-- Application Structure Plan:
+         The application is designed as a multi-module executive technical dashboard that transforms dense research into an intuitive, interactive experience.
+         Structure:
+         1. Hero / Key Metrics Header: Quick high-level macro statistics ($36.2B RWA TVL, GIFT City tax benefits, standard comparison).
+         2. Tab Navigation Bar: Enables rapid switching across 6 core thematic domains:
+            - EVM Low-Level & Technical Mechanics (ERC-3643 vs ERC-20, Storage Slot Gas Calculator, Assembly Optimizations, Oracles).
+            - Indian Market Opportunities & GIFT City (eNWR, Commercial Real Estate, IFSCA Framework & Tax Yield Simulator).
+            - Indian Competitive Landscape (Searchable/Filterable matrix of key players like Axis Bank, Tokeny, InfraLedger, etc.).
+            - Regulatory, Legal & CIS Matrix (SEBI Section 11AA CIS Wizard, Property Law SPV Abstraction, PMLA, Tax Classification).
+            - VC Funding & Unit Economics Strategy (Interactive Platform Financial & Valuation Calculator, Pitch Architecture).
+            - Global Frontier Use Cases (Treasuries, Toyota MON IoT, Maritime LNG, Aerospace Debt).
+         3. Dynamic Content Panels: Each panel features detailed technical prose, interactive simulators/calculators, and Chart.js responsive canvas charts.
+         This architecture prioritizes logical task-oriented views over raw text walls, allowing developers, founders, and investors to test scenarios and evaluate compliance in real-time.
+    -->
+    <!-- Visualization & Content Choices:
+         - Chart 1: EVM Gas Consumption Comparison (Bar Chart) -> Comparing standard ERC-20 vs ERC-3643 vs Assembly-Cached ERC-3643 to justify low-level storage optimization.
+         - Interactive Storage Slot Calculator: Calculates Keccak-256 mapping memory addresses and gas costs (SLOAD/SSTORE) for developers.
+         - Chart 2: Indian RWA Addressable Market Projections 2025-2030 (Stacked Area/Bar Chart) -> Agri-eNWR, CRE, Debt, Infra.
+         - Interactive GIFT City vs Onshore Tax Yield Calculator: Compares net returns under 30% VDA/Onshore vs GIFT City zero-TDS structure.
+         - Interactive SEBI CIS & Compliance Wizard: Step-by-step risk evaluator for platforms targeting Indian assets.
+         - Chart 3: Global RWA On-Chain Value Composition (Donut Chart) -> Treasuries, Real Estate, Private Credit, Commodities.
+         - Interactive VC Unit Economics Calculator: Inputs volume & bps to project annual platform revenue and token/equity valuation.
+         Confirmation: NO SVG graphics or Mermaid JS used. Standard HTML/Unicode symbols and Canvas-rendered Chart.js only.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <!-- Top Navigation / Brand Bar -->
+    <header class="bg-slate-900 text-white border-b border-slate-800 sticky top-0 z-50 shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center py-3">
+            <div class="flex items-center space-x-3 mb-2 md:mb-0">
+                <span class="text-emerald-400 text-2xl font-black tracking-wider">&#9881; RWA-NEXUS</span>
+                <span class="text-xs bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded font-mono">v2026.1 ARCHITECTURE</span>
+            </div>
+            <div class="text-xs text-slate-400 text-center md:text-right">
+                <span class="inline-block mr-3">&#127760; Global RWA On-Chain TVL: <strong class="text-emerald-400">$36.27B</strong></span>
+                <span class="inline-block">&#127470;&#127475; GIFT City IFSCA Compliant</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Hero Banner -->
+    <section class="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 text-white py-8 border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-3xl">
+                <h1 class="text-2xl sm:text-4xl font-extrabold tracking-tight text-white mb-2">
+                    Real-World Asset Tokenization: Technical Mechanics, Indian Integration & Global Frontiers
+                </h1>
+                <p class="text-sm sm:text-base text-slate-300">
+                    An interactive strategic framework for backend architects, regulatory attorneys, and venture investors navigating EVM state slots, legal SPV abstractions, SEBI CIS compliance, and multi-billion dollar RWA opportunities.
+                </p>
+            </div>
+
+            <!-- Key Quick Stats Strip -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6 pt-6 border-t border-slate-800/80">
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                    <div class="text-xs text-slate-400 font-medium">Standard Standard</div>
+                    <div class="text-lg font-bold text-emerald-400">ERC-3643 (T-REX)</div>
+                    <div class="text-[10px] text-slate-400">Automated Compliance & Identity</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                    <div class="text-xs text-slate-400 font-medium">Indian Regulatory Gateway</div>
+                    <div class="text-lg font-bold text-indigo-300">GIFT City (IFSCA)</div>
+                    <div class="text-[10px] text-slate-400">Zero TDS & Capital Gains Exempt</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                    <div class="text-xs text-slate-400 font-medium">Key Onshore Safe Harbor</div>
+                    <div class="text-lg font-bold text-amber-300">SPV + AIF / Debt</div>
+                    <div class="text-[10px] text-slate-400">Avoids SEBI CIS Classification</div>
+                </div>
+                <div class="bg-slate-800/50 p-3 rounded-lg border border-slate-700/50">
+                    <div class="text-xs text-slate-400 font-medium">Tokenized U.S. Treasuries</div>
+                    <div class="text-lg font-bold text-emerald-400">$13.4B Global TVL</div>
+                    <div class="text-[10px] text-slate-400">BlackRock BUIDL & Franklin BENJI</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tab Navigation Bar -->
+    <nav class="bg-white border-b border-slate-200 sticky top-[53px] z-40 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex space-x-2 sm:space-x-8 overflow-x-auto custom-scrollbar text-xs sm:text-sm font-medium py-1">
+                <button onclick="switchTab('evm')" id="tab-evm" class="tab-btn py-3 px-2 whitespace-nowrap text-slate-600 hover:text-emerald-600 transition-colors tab-active">
+                    &#9881; 1. EVM Architecture & Low-Level
+                </button>
+                <button onclick="switchTab('india')" id="tab-india" class="tab-btn py-3 px-2 whitespace-nowrap text-slate-600 hover:text-emerald-600 transition-colors">
+                    &#127470;&#127475; 2. Indian RWA & GIFT City
+                </button>
+                <button onclick="switchTab('landscape')" id="tab-landscape" class="tab-btn py-3 px-2 whitespace-nowrap text-slate-600 hover:text-emerald-600 transition-colors">
+                    &#127970; 3. Competitive Landscape
+                </button>
+                <button onclick="switchTab('regulatory')" id="tab-regulatory" class="tab-btn py-3 px-2 whitespace-nowrap text-slate-600 hover:text-emerald-600 transition-colors">
+                    &#9878; 4. Regulatory & CIS Matrix
+                </button>
+                <button onclick="switchTab('funding')" id="tab-funding" class="tab-btn py-3 px-2 whitespace-nowrap text-slate-600 hover:text-emerald-600 transition-colors">
+                    &#128200; 5. VC Strategy & Unit Econ
+                </button>
+                <button onclick="switchTab('global')" id="tab-global" class="tab-btn py-3 px-2 whitespace-nowrap text-slate-600 hover:text-emerald-600 transition-colors">
+                    &#127760; 6. Global Frontiers
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- ==================== TAB 1: EVM ARCHITECTURE ==================== -->
+        <section id="panel-evm" class="space-y-8">
+            <!-- Introductory Context Block -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-2 flex items-center space-x-2">
+                    <span class="text-emerald-600">&#9881;</span>
+                    <span>Smart Contract Architecture & Low-Level EVM Storage Slot Allocation</span>
+                </h2>
+                <p class="text-sm text-slate-600">
+                    This section details the low-level execution mechanics of tokenized securities on Ethereum Virtual Machine (EVM) blockchains. Issuing permissioned financial assets requires replacing simple permissionless standards (ERC-20) with identity-aware permissioned standard suites (ERC-3643). Below, explore the architectural breakdown, the storage slot layout for mapping lookup gas costs, and an interactive EVM gas simulator.
+                </p>
+            </div>
+
+            <!-- Content Grid: Standard Comparison & Mechanics -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Standard Comparison Matrix -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm lg:col-span-2">
+                    <h3 class="text-md font-bold text-slate-900 mb-3 border-b pb-2">Smart Contract Standards Comparison for Institutional RWA</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs text-slate-700">
+                            <thead class="bg-slate-100 text-slate-900 uppercase font-semibold">
+                                <tr>
+                                    <th class="p-2.5">Feature / Metric</th>
+                                    <th class="p-2.5">ERC-20</th>
+                                    <th class="p-2.5">ERC-1400</th>
+                                    <th class="p-2.5 text-emerald-700 bg-emerald-50">ERC-3643 (T-REX)</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-slate-100 font-mono text-[11px]">
+                                <tr>
+                                    <td class="p-2.5 font-sans font-semibold text-slate-900">Transfer Logic</td>
+                                    <td class="p-2.5">Permissionless</td>
+                                    <td class="p-2.5">Partitioned / Off-chain Keys</td>
+                                    <td class="p-2.5 text-emerald-800 bg-emerald-50/50 font-bold">On-Chain Identity Registry Check</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-sans font-semibold text-slate-900">Identity Container</td>
+                                    <td class="p-2.5">None</td>
+                                    <td class="p-2.5">Whitelisted Addresses</td>
+                                    <td class="p-2.5 text-emerald-800 bg-emerald-50/50">ONCHAINID (ERC-734 / ERC-735)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-sans font-semibold text-slate-900">Compliance Logic</td>
+                                    <td class="p-2.5">None</td>
+                                    <td class="p-2.5">Operator Validated</td>
+                                    <td class="p-2.5 text-emerald-800 bg-emerald-50/50">Modular Compliance (`canTransfer`)</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-sans font-semibold text-slate-900">Recovery & Force Transfer</td>
+                                    <td class="p-2.5 text-red-600">Impossible</td>
+                                    <td class="p-2.5">Partial (Controller Role)</td>
+                                    <td class="p-2.5 text-emerald-800 bg-emerald-50/50">`AgentManager` Built-in Key Recovery</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-2.5 font-sans font-semibold text-slate-900">Primary Industry Adoption</td>
+                                    <td class="p-2.5">DeFi / Memecoins</td>
+                                    <td class="p-2.5">Legacy Pilots</td>
+                                    <td class="p-2.5 text-emerald-800 bg-emerald-50/50 font-bold">Institutional RWA & Securitize/Tokeny</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="mt-4 text-xs text-slate-500 bg-slate-50 p-3 rounded-lg border border-slate-200">
+                        <strong>Execution Sequence:</strong> When `transfer()` is invoked in ERC-3643, it intercepts the call and executes `IdentityRegistry.isVerified(userAddress)`. The registry queries the user's `ONCHAINID` contract for cryptographic signatures matching required claim topics (e.g., ISO-3166 country code, KYC level) from `TrustedIssuersRegistry`. Next, `ModularCompliance.canTransfer()` verifies daily cap locks before updating balances.
+                    </div>
+                </div>
+
+                <!-- Technical Deep Dive: Storage Slots -->
+                <div class="bg-slate-900 text-white p-5 rounded-xl border border-slate-800 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-md font-bold text-emerald-400 mb-2">EVM Storage & Assembly Optimization</h3>
+                        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+                            In EVM, dynamic state storage uses 256-bit (32-byte) key-value slots. Standard mapping dynamic keys are calculated via:
+                        </p>
+                        <div class="bg-slate-950 p-3 rounded border border-slate-800 font-mono text-[11px] text-emerald-300 mb-3 overflow-x-auto">
+                            Slot = keccak256(abi.encode(key, baseSlot))
+                        </div>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            <strong>Note on Padding:</strong> EVM uses Keccak-256 with <code class="text-amber-300">0x01</code> padding byte (distinct from standard SHA3-256 <code class="text-amber-300">0x06</code> byte).
+                        </p>
+                        <div class="mt-3 text-xs text-slate-400 space-y-1">
+                            <div>&#8226; <strong class="text-white">Cold SLOAD:</strong> 2,100 Gas</div>
+                            <div>&#8226; <strong class="text-white">New SSTORE:</strong> 20,000 Gas</div>
+                            <div>&#8226; <strong class="text-white">Scratch Memory (0x00-0x3f):</strong> Used via Huff/Yul assembly macros to compute hashes without memory expansion fees.</div>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+                        Struct packing ensures variables like <code class="text-emerald-400">uint8</code> and <code class="text-emerald-400">bool</code> share a single 32-byte slot, drastically reducing secondary market execution fees.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive EVM Gas & Storage Slot Simulator -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-4">
+                    <div>
+                        <h3 class="text-lg font-bold text-slate-900">Interactive Tool: EVM Compliance Check Gas & Storage Calculator</h3>
+                        <p class="text-xs text-slate-500">Simulate gas execution overhead for compliance queries and test scratch-space assembly caching.</p>
+                    </div>
+                    <span class="mt-2 md:mt-0 text-xs font-mono bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full border border-indigo-200">
+                        EVM Opcode Benchmarking
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Identity Claims to Verify per Transfer</label>
+                            <input type="range" id="claim-count" min="1" max="5" value="2" class="w-full accent-emerald-600" oninput="updateGasCalc()">
+                            <div class="flex justify-between text-xs text-slate-500 font-mono mt-1">
+                                <span>1 Claim (KYC)</span>
+                                <span id="claim-count-val" class="font-bold text-emerald-600">2 Claims</span>
+                                <span>5 Claims (Multi-Jurisdiction)</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">EVM Implementation Strategy</label>
+                            <select id="gas-strategy" class="w-full text-xs p-2 bg-white border border-slate-300 rounded focus:ring-emerald-500 focus:border-emerald-500" onchange="updateGasCalc()">
+                                <option value="unoptimized">Standard High-Level Solidity (Repeated Cold SLOADs)</option>
+                                <option value="packed">Struct-Packed Solidity (Grouped Storage Slots)</option>
+                                <option value="assembly" selected>Low-Level Yul Assembly Caching (0x00 Scratch Memory)</option>
+                            </select>
+                        </div>
+
+                        <div class="text-xs text-slate-600 space-y-1 pt-2 border-t border-slate-200">
+                            <div class="flex justify-between">
+                                <span>Base Transfer Gas:</span>
+                                <span class="font-mono">21,000</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Identity Lookup Gas:</span>
+                                <span id="calc-lookup-gas" class="font-mono text-indigo-600">4,200</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Compliance Rules Gas:</span>
+                                <span id="calc-rules-gas" class="font-mono text-indigo-600">5,000</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart Container for EVM Gas Comparison -->
+                    <div class="md:col-span-2 bg-slate-50 p-4 rounded-lg border border-slate-200 flex flex-col justify-between">
+                        <div class="chart-container">
+                            <canvas id="evmGasChart"></canvas>
+                        </div>
+                        <div id="gas-efficiency-note" class="text-center text-xs text-emerald-700 bg-emerald-50 p-2 rounded border border-emerald-200 mt-2 font-mono">
+                            Assembly Caching saves approx 12,400 Gas per transfer vs Unoptimized Solidity!
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 2: INDIAN RWA & GIFT CITY ==================== -->
+        <section id="panel-india" class="space-y-8 hidden">
+            <!-- Context Block -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-2 flex items-center space-x-2">
+                    <span class="text-emerald-600">&#127470;&#127475;</span>
+                    <span>Transformative Applications in India & The GIFT City (IFSCA) Catalyst</span>
+                </h2>
+                <p class="text-sm text-slate-600">
+                    India presents massive structural opportunities for RWA tokenization—spanning $100B+ agricultural supply chains via Electronic Negotiable Warehouse Receipts (eNWR) and Commercial Real Estate (CRE). The establishment of GIFT City and its IFSCA unified regulator provides the legal backbone for compliant tokenized capital flows.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <!-- Agri eNWR & CRE Analysis Cards -->
+                <div class="space-y-4">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded">Agri-Financing</span>
+                            <h3 class="text-base font-bold text-slate-900">Electronic Negotiable Warehouse Receipts (eNWR)</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            Regulated by the Warehousing Development and Regulatory Authority (WDRA), eNWRs represent physical agricultural commodities stored in accredited warehouses. Historically plagued by fraud and double-pledging across multiple lenders, tokenizing eNWRs on blockchain establishes absolute cryptographic proof of non-duplication.
+                        </p>
+                        <div class="text-xs text-slate-700 bg-slate-50 p-3 rounded border border-slate-200 space-y-1">
+                            <div>&#10004; <strong>Fractional Commodity Debt:</strong> Micro-lenders and retail investors fund warehouse receipts.</div>
+                            <div>&#10004; <strong>Instant DvP Settlement:</strong> Atomic delivery-versus-payment settlement reduces loan disbursement times from 7 days to minutes.</div>
+                            <div>&#10004; <strong>Pioneering Enterprise Adoption:</strong> Axis Bank has piloted blockchain eNWR credit lines.</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="bg-indigo-100 text-indigo-800 text-xs font-bold px-2.5 py-0.5 rounded">PropTech</span>
+                            <h3 class="text-base font-bold text-slate-900">Commercial Real Estate (CRE) Fractionalization</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed mb-3">
+                            Indian Grade-A commercial real estate is highly illiquid with minimum ticket sizes exceeding &#8377;10 Crores ($1.2M). Tokenization fragments economic ownership into digital security shares, providing monthly automated rental yields via smart contracts.
+                        </p>
+                        <div class="text-xs text-slate-700 bg-slate-50 p-3 rounded border border-slate-200 space-y-1">
+                            <div>&#10004; <strong>SPV Structuring:</strong> Real estate held in a Private Limited Special Purpose Vehicle; tokens represent SPV equity/debentures.</div>
+                            <div>&#10004; <strong>Automated Rental Yield:</strong> Smart contracts distribute USDC/INR stablecoin payouts directly to whitelisted ONCHAINID wallets.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Addressable Market Size Chart Container -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Projected Indian RWA On-Chain Value (2025–2030)</h3>
+                        <p class="text-xs text-slate-500 mb-4">Estimated growth trajectory across major domestic asset classes (in $ Billions USD).</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="indiaMarketChart"></canvas>
+                    </div>
+                    <div class="text-[11px] text-slate-500 text-center mt-2 italic">
+                        Data Source: Structural macroeconomic forecasts & IFSCA sandbox projections.
+                    </div>
+                </div>
+            </div>
+
+            <!-- GIFT City Regulatory Catalyst & Yield Simulator -->
+            <div class="bg-slate-900 text-white p-6 rounded-xl border border-slate-800 shadow-sm">
+                <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
+                    <div>
+                        <span class="bg-emerald-900 text-emerald-300 text-xs font-bold px-3 py-1 rounded-full border border-emerald-700">IFSCA Framework (Feb 2025 Consultation)</span>
+                        <h3 class="text-xl font-bold text-white mt-2">GIFT City Regulatory & Tax Arbitrage Calculator</h3>
+                        <p class="text-xs text-slate-300">Compare net yields: Domestic Indian Onshore (VDA 30% Tax) vs GIFT City IFSCA Offshore Fund Structure.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Simulator Controls -->
+                    <div class="bg-slate-800 p-4 rounded-lg border border-slate-700 space-y-4">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Investment Amount ($ USD)</label>
+                            <input type="number" id="gift-inv-amount" value="100000" step="10000" class="w-full text-xs p-2 bg-slate-900 border border-slate-700 rounded text-white font-mono" onchange="calcGiftYield()">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-300 mb-1">Gross Annual Asset Yield (%)</label>
+                            <input type="range" id="gift-yield-rate" min="4" max="18" value="10" step="0.5" class="w-full accent-emerald-500" oninput="calcGiftYield()">
+                            <div class="flex justify-between text-xs text-slate-400 font-mono mt-1">
+                                <span>4%</span>
+                                <span id="gift-yield-rate-val" class="text-emerald-400 font-bold">10.0%</span>
+                                <span>18%</span>
+                            </div>
+                        </div>
+                        <div class="text-xs text-slate-400 space-y-1 pt-2 border-t border-slate-700">
+                            <div>&#8226; <strong>Domestic Onshore:</strong> Subject to Section 115BBH (30% VDA Tax + 1% TDS) if classified as crypto asset.</div>
+                            <div>&#8226; <strong>GIFT City (IFSCA):</strong> 100% Tax holiday for 10 years, Zero TDS on distributions, exempted from capital gains tax upon redemption.</div>
+                        </div>
+                    </div>
+
+                    <!-- Simulator Output Comparison -->
+                    <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Onshore Card -->
+                        <div class="bg-red-950/40 border border-red-800/50 p-4 rounded-lg flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs text-red-400 font-bold uppercase tracking-wider">Domestic Onshore Route</span>
+                                <div class="text-2xl font-bold text-white mt-1" id="onshore-net-payout">$7,000</div>
+                                <div class="text-xs text-red-300 mt-1">Net Annual Yield: <span id="onshore-net-yield" class="font-bold">7.0%</span></div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-red-900/50 text-[11px] text-red-300 space-y-1">
+                                <div class="flex justify-between"><span>Gross Profit:</span><span id="onshore-gross" class="font-mono">$10,000</span></div>
+                                <div class="flex justify-between"><span>30% VDA Tax:</span><span id="onshore-tax" class="font-mono">-$3,000</span></div>
+                                <div class="flex justify-between"><span>1% TDS Overhead:</span><span id="onshore-tds" class="font-mono">-$1,000</span></div>
+                            </div>
+                        </div>
+
+                        <!-- GIFT City Card -->
+                        <div class="bg-emerald-950/40 border border-emerald-600/50 p-4 rounded-lg flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-emerald-400 font-bold uppercase tracking-wider">GIFT City IFSCA Route</span>
+                                    <span class="text-[10px] bg-emerald-500 text-slate-950 font-bold px-2 py-0.5 rounded">OPTIMAL</span>
+                                </div>
+                                <div class="text-2xl font-bold text-white mt-1" id="gift-net-payout">$10,000</div>
+                                <div class="text-xs text-emerald-300 mt-1">Net Annual Yield: <span id="gift-net-yield" class="font-bold">10.0%</span></div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-emerald-900/50 text-[11px] text-emerald-300 space-y-1">
+                                <div class="flex justify-between"><span>Gross Profit:</span><span id="gift-gross" class="font-mono">$10,000</span></div>
+                                <div class="flex justify-between"><span>IFSCA Tax Exempt:</span><span class="font-mono text-emerald-400">$0</span></div>
+                                <div class="flex justify-between"><span>Net Alpha Retained:</span><span id="gift-alpha" class="font-mono font-bold text-emerald-400">+$3,000 / yr</span></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: COMPETITIVE LANDSCAPE ==================== -->
+        <section id="panel-landscape" class="space-y-8 hidden">
+            <!-- Context Block -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-2 flex items-center space-x-2">
+                    <span class="text-emerald-600">&#127970;</span>
+                    <span>Indian RWA Competitive Landscape & Key Market Participants</span>
+                </h2>
+                <p class="text-sm text-slate-600">
+                    The Indian tokenization market features an ecosystem of commercial banks, open-source compliance standards, fractional PropTech pioneers, and cross-border settlement infrastructure. Explore and filter active market players below.
+                </p>
+            </div>
+
+            <!-- Search and Filter Controls -->
+            <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="w-full sm:w-1/2">
+                    <input type="text" id="company-search" placeholder="&#128099; Search entity, technology stack, or market focus..." class="w-full text-xs p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-emerald-500 focus:border-emerald-500" onkeyup="filterCompanies()">
+                </div>
+                <div class="flex space-x-2 w-full sm:w-auto overflow-x-auto">
+                    <button onclick="filterCategory('All')" class="company-cat-btn text-xs px-3 py-1.5 rounded-lg border border-emerald-600 bg-emerald-600 text-white font-medium">All</button>
+                    <button onclick="filterCategory('Banking')" class="company-cat-btn text-xs px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50">Banking</button>
+                    <button onclick="filterCategory('Protocol')" class="company-cat-btn text-xs px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50">Protocol</button>
+                    <button onclick="filterCategory('PropTech')" class="company-cat-btn text-xs px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50">PropTech</button>
+                    <button onclick="filterCategory('Settlement')" class="company-cat-btn text-xs px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50">Settlement</button>
+                </div>
+            </div>
+
+            <!-- Company Dynamic Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="company-grid">
+                <!-- Companies rendered dynamically by JS -->
+            </div>
+        </section>
+
+        <!-- ==================== TAB 4: REGULATORY & CIS MATRIX ==================== -->
+        <section id="panel-regulatory" class="space-y-8 hidden">
+            <!-- Context Block -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-2 flex items-center space-x-2">
+                    <span class="text-emerald-600">&#9878;</span>
+                    <span>Regulatory Frameworks, Legal Abstractions, & CIS Risk Mitigation</span>
+                </h2>
+                <p class="text-sm text-slate-600">
+                    Navigating domestic Indian tokenization requires overcoming rigid statutory hurdles: SEBI Collective Investment Scheme (CIS) classification, Transfer of Property Act (1882) constraints, PMLA compliance, and Virtual Digital Asset (VDA) tax exposure.
+                </p>
+            </div>
+
+            <!-- Statutory Breakdown Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- SEBI CIS Doctrine -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-base font-bold text-slate-900">SEBI CIS Doctrine (Section 11AA)</h3>
+                        <span class="bg-red-100 text-red-800 text-[10px] font-bold px-2 py-0.5 rounded">High Regulatory Risk</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+                        Under Section 11AA of the SEBI Act (1992), any arrangement pooling investor funds exceeding &#8377;100 Crores where investors lack day-to-day managerial control constitutes a Collective Investment Scheme (CIS). Unregistered CIS operations trigger severe criminal liability under Section 24.
+                    </p>
+                    <div class="bg-slate-50 p-3 rounded border border-slate-200 text-xs space-y-1">
+                        <strong class="text-slate-900 block mb-1">4-Part SEBI CIS Test:</strong>
+                        <div>1. Payments are pooled for scheme profit.</div>
+                        <div>2. Investors receive rental/capital income.</div>
+                        <div>3. Asset managed on behalf of investors.</div>
+                        <div>4. Investors possess zero operational day-to-day control.</div>
+                    </div>
+                </div>
+
+                <!-- Property Law & SPV Abstraction -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="flex justify-between items-center mb-3">
+                        <h3 class="text-base font-bold text-slate-900">Property Law & SPV Abstraction</h3>
+                        <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded">Legal Solution</span>
+                    </div>
+                    <p class="text-xs text-slate-600 mb-3 leading-relaxed">
+                        Under the Transfer of Property Act (1882) & Registration Act (1908), direct blockchain token transfers hold ZERO legal validity for property title transfer in India and require physical stamp duty execution.
+                    </p>
+                    <div class="bg-slate-50 p-3 rounded border border-slate-200 text-xs space-y-1">
+                        <strong class="text-slate-900 block mb-1">The SPV Legal Safe Harbor:</strong>
+                        <div>1. Land is deeded directly to an SPV (Pvt Ltd / LLP).</div>
+                        <div>2. SPV issues corporate debentures/shares to investors.</div>
+                        <div>3. Tokens represent fractional security claims in SPV equity.</div>
+                        <div>4. Complies with Companies Act (2013) & RERA (2016).</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Tool: Compliance Risk Assessment Wizard -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold text-slate-900 mb-1">Interactive Tool: SEBI CIS & Tax Risk Evaluator</h3>
+                <p class="text-xs text-slate-500 mb-4">Answer 4 structured questions to determine if your platform triggers SEBI CIS or VDA tax classification.</p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="space-y-3 bg-slate-50 p-4 rounded-lg border border-slate-200 lg:col-span-2">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-800 mb-1">1. Do token holders have direct operational day-to-day control over the asset?</label>
+                            <select id="cis-q1" class="w-full text-xs p-2 bg-white border border-slate-300 rounded" onchange="evaluateCompliance()">
+                                <option value="no">No - Professional manager handles property/asset</option>
+                                <option value="yes">Yes - Holders explicitly vote and manage daily tasks</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-800 mb-1">2. How is the physical asset legally held?</label>
+                            <select id="cis-q2" class="w-full text-xs p-2 bg-white border border-slate-300 rounded" onchange="evaluateCompliance()">
+                                <option value="direct">Direct Fractional Blockchain Recording (No SPV)</option>
+                                <option value="spv" selected>Special Purpose Vehicle (Private Limited / LLP)</option>
+                                <option value="gift">GIFT City IFSCA Registered Structure</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-800 mb-1">3. What financial instrument do the tokens represent?</label>
+                            <select id="cis-q3" class="w-full text-xs p-2 bg-white border border-slate-300 rounded" onchange="evaluateCompliance()">
+                                <option value="utility">Utility Token / Peer-to-Peer Agreement</option>
+                                <option value="debenture" selected>SEBI-Registered AIF Units or Corporate Debentures</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-800 mb-1">4. Target Total Value Raised (INR)</label>
+                            <select id="cis-q4" class="w-full text-xs p-2 bg-white border border-slate-300 rounded" onchange="evaluateCompliance()">
+                                <option value="under100">Under &#8377;100 Crores ($12M)</option>
+                                <option value="over100" selected>Over &#8377;100 Crores ($12M+)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Output Assessment Box -->
+                    <div id="compliance-result-box" class="p-5 rounded-lg border flex flex-col justify-between bg-amber-50 border-amber-300 text-amber-900">
+                        <div>
+                            <div class="text-xs font-bold uppercase tracking-wider text-amber-700" id="comp-risk-level">Risk Level: MODERATE</div>
+                            <h4 class="text-lg font-bold mt-1" id="comp-title">SPV Structural Safeguard Active</h4>
+                            <p class="text-xs mt-2 leading-relaxed" id="comp-desc">
+                                Operating through an SPV holding equity/debentures legally abstracts physical land constraints. Ensure filing with Registrar of Companies (ROC) under Private Placement limits.
+                            </p>
+                        </div>
+                        <div class="mt-4 pt-3 border-t border-amber-200/80 text-[11px] font-mono" id="comp-action">
+                            &#9888; Mandatory Action: Structuring through SEBI-registered AIF Cat II/III recommended if pooling exceeds &#8377;100 Cr.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 5: VC STRATEGY & FINANCIAL MODEL ==================== -->
+        <section id="panel-funding" class="space-y-8 hidden">
+            <!-- Context Block -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-2 flex items-center space-x-2">
+                    <span class="text-emerald-600">&#128200;</span>
+                    <span>Venture Capital Pitch Architecture & Unit Economics Model</span>
+                </h2>
+                <p class="text-sm text-slate-600">
+                    Venture capitalists evaluate RWA platforms on regulatory moats, Total Value Locked (TVL), Net Yield delivery, active trading volume, and operational basis point (bps) reduction. Below is a structured pitch framework and an interactive platform financial calculator.
+                </p>
+            </div>
+
+            <!-- VC Pitch Metrics Matrix -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-bold text-slate-500 uppercase">Core KPI 1</div>
+                    <div class="text-base font-bold text-slate-900 mt-1">Total Value Locked (TVL)</div>
+                    <p class="text-[11px] text-slate-600 mt-1">Absolute proof of asset origination pipeline traction. Target: $50M+ in Year 1.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-bold text-slate-500 uppercase">Core KPI 2</div>
+                    <div class="text-base font-bold text-slate-900 mt-1">Net Yield Spread</div>
+                    <p class="text-[11px] text-slate-600 mt-1">Risk-adjusted return post oracle, SPV management, & protocol fee deductions.</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-bold text-slate-500 uppercase">Core KPI 3</div>
+                    <div class="text-base font-bold text-slate-900 mt-1">Trading Velocity</div>
+                    <p class="text-[11px] text-slate-600 mt-1">Monthly secondary transfer volume indicating active liquidity (vs static locking).</p>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                    <div class="text-xs font-bold text-slate-500 uppercase">Core KPI 4</div>
+                    <div class="text-base font-bold text-slate-900 mt-1">bps Cost Reduction</div>
+                    <p class="text-[11px] text-slate-600 mt-1">Operational basis points stripped out vs legacy paper issuance (Target: 150-250 bps savings).</p>
+                </div>
+            </div>
+
+            <!-- Interactive Platform Unit Economics Calculator -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h3 class="text-lg font-bold text-slate-900 mb-1">Interactive Platform Financial & Valuation Simulator</h3>
+                <p class="text-xs text-slate-500 mb-4">Adjust asset origination volume and protocol monetization fees to project platform ARR and VC valuation multiples.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-4 bg-slate-50 p-4 rounded-lg border border-slate-200">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Annual Originated Asset Volume ($M)</label>
+                            <input type="range" id="vc-vol" min="10" max="500" value="100" step="10" class="w-full accent-emerald-600" oninput="calcVcModel()">
+                            <div class="flex justify-between text-xs font-mono text-slate-500 mt-1">
+                                <span>$10M</span>
+                                <span id="vc-vol-val" class="font-bold text-emerald-600">$100M</span>
+                                <span>$500M</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Origination / Tokenization Fee (bps)</label>
+                            <input type="range" id="vc-fee" min="10" max="150" value="50" step="5" class="w-full accent-emerald-600" oninput="calcVcModel()">
+                            <div class="flex justify-between text-xs font-mono text-slate-500 mt-1">
+                                <span>10 bps (0.1%)</span>
+                                <span id="vc-fee-val" class="font-bold text-emerald-600">50 bps (0.5%)</span>
+                                <span>150 bps (1.5%)</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-700 mb-1">Annual Secondary Trading Volume (% of TVL)</label>
+                            <input type="range" id="vc-sec" min="10" max="200" value="50" step="10" class="w-full accent-emerald-600" oninput="calcVcModel()">
+                            <div class="flex justify-between text-xs font-mono text-slate-500 mt-1">
+                                <span>10%</span>
+                                <span id="vc-sec-val" class="font-bold text-emerald-600">50%</span>
+                                <span>200%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financial Output Dashboard -->
+                    <div class="md:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-slate-900 text-white p-4 rounded-lg flex flex-col justify-between">
+                            <div>
+                                <span class="text-xs text-slate-400 uppercase font-bold">Annual Recurring Revenue (ARR)</span>
+                                <div class="text-3xl font-extrabold text-emerald-400 mt-1" id="vc-arr-val">$525,000</div>
+                                <div class="text-xs text-slate-300 mt-2 space-y-1 font-mono">
+                                    <div class="flex justify-between"><span>Origination Revenue:</span><span id="vc-orig-rev">$500,000</span></div>
+                                    <div class="flex justify-between"><span>Secondary Trading Fee (5 bps):</span><span id="vc-sec-rev">$25,000</span></div>
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-slate-400">
+                                Direct protocol revenue streams derived from primary issuance and secondary automated market making.
+                            </div>
+                        </div>
+
+                        <div class="bg-indigo-950 text-white p-4 rounded-lg flex flex-col justify-between border border-indigo-800">
+                            <div>
+                                <span class="text-xs text-indigo-300 uppercase font-bold">Projected VC Platform Valuation</span>
+                                <div class="text-3xl font-extrabold text-indigo-200 mt-1" id="vc-val-val">$7.88M</div>
+                                <div class="text-xs text-indigo-300 mt-2 font-mono">
+                                    Based on typical 15x ARR Multiple for Series-A RWA Infrastructure Protocols.
+                                </div>
+                            </div>
+                            <div class="mt-4 pt-3 border-t border-indigo-900/80 text-[11px] text-indigo-300">
+                                &#128073; <strong>Pitch Positioning:</strong> Position platform as "Compliant Digital Asset Lifecycle Infrastructure" taking advantage of IFSCA regulatory sandbox tailwinds.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 6: GLOBAL FRONTIERS ==================== -->
+        <section id="panel-global" class="space-y-8 hidden">
+            <!-- Context Block -->
+            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
+                <h2 class="text-xl font-bold text-slate-900 mb-2 flex items-center space-x-2">
+                    <span class="text-emerald-600">&#127760;</span>
+                    <span>Global Frontier Applications & Market Breakdown</span>
+                </h2>
+                <p class="text-sm text-slate-600">
+                    Beyond real estate, global RWA tokenization is reshaping sovereign debt, IoT industrial telemetry, maritime infrastructure, and aerospace financing. Below is the global market composition and key institutional case studies.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Case Studies Cards -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded">Sovereign Debt</span>
+                            <h3 class="text-base font-bold text-slate-900">Tokenized Treasuries & MMFs ($13.4B TVL)</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Institutional giants BlackRock (BUIDL fund) and Franklin Templeton (BENJI / FOBXX) have brought billions in sovereign yield on-chain. Ondo Finance leads secondary synthetic access. These yield-bearing tokens serve as fundamental risk-free collateral across decentralized prime brokerage networks.
+                        </p>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+                        <div class="flex items-center space-x-2 mb-2">
+                            <span class="bg-blue-100 text-blue-800 text-xs font-bold px-2.5 py-0.5 rounded">IoT & Mobility</span>
+                            <h3 class="text-base font-bold text-slate-900">Toyota MON (Mobility-Oriented Network)</h3>
+                        </div>
+                        <p class="text-xs text-slate-600 leading-relaxed">
+                            Toyota assigns physical vehicles an NFT digital twin linked to a Mobility-Oriented Account (MOA). Uses Zero-Knowledge (ZK) proofs to separate driver telemetry (U-MOA) from fleet asset trust records (T-MOA), allowing instant automated fleet securitization and usage-based insurance settlements.
+                        </p>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2 py-0.5 rounded">Maritime</span>
+                            <h4 class="text-sm font-bold text-slate-900 mt-2">LNG Vessel Debt (InvestaX)</h4>
+                            <p class="text-xs text-slate-600 mt-1">Tokenization of a 145,000 m&#179; LNG vessel loan in Singapore, syndicating industrial maritime debt to global investors.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+                            <span class="bg-purple-100 text-purple-800 text-[10px] font-bold px-2 py-0.5 rounded">Aerospace</span>
+                            <h4 class="text-sm font-bold text-slate-900 mt-2">SpaceX Corporate Bonds (Cometum)</h4>
+                            <p class="text-xs text-slate-600 mt-1">Structured tokenized bond issuance offering fractional exposure to aerospace infrastructure debt.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Global RWA Composition Chart -->
+                <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-base font-bold text-slate-900 mb-1">Global On-Chain RWA Composition</h3>
+                        <p class="text-xs text-slate-500 mb-4">Percentage breakdown by underlying asset class (Excluding Fiat Stablecoins).</p>
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="globalRwaChart"></canvas>
+                    </div>
+                    <div class="text-[11px] text-slate-500 text-center mt-2 font-mono">
+                        Total On-Chain RWA Value: $36.27 Billion
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Global Footer -->
+    <footer class="bg-slate-900 text-slate-400 border-t border-slate-800 py-6 mt-12 text-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <span class="text-white font-bold">RWA Architecture & Strategy Framework</span> &mdash; Built for Enterprise Blockchain Engineers & Venture Founders.
+            </div>
+            <div class="flex space-x-4 text-slate-400">
+                <span>ERC-3643 Standard</span>
+                <span>&#8226;</span>
+                <span>IFSCA GIFT City</span>
+                <span>&#8226;</span>
+                <span>SEBI CIS Safe Harbor</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // Company Dataset for Filterable Matrix
+        const companyData = [
+            {
+                name: "Axis Bank",
+                cat: "Banking",
+                badge: "Commercial Banking",
+                badgeColor: "bg-blue-100 text-blue-800",
+                desc: "Spearheading enterprise blockchain credit lines and agricultural eNWR tokenization to eliminate collateral double-pledging.",
+                tech: "Hyperledger / EVM Enterprise",
+                legal: "WDRA & RBI Regulated Banking Framework"
+            },
+            {
+                name: "Tokeny",
+                cat: "Protocol",
+                badge: "Identity & Compliance",
+                badgeColor: "bg-emerald-100 text-emerald-800",
+                desc: "Supplying the open-source ERC-3643 protocol and ONCHAINID standard. Partnered for India's first regulated GIFT City real estate token.",
+                tech: "ERC-3643 / ONCHAINID / EVM",
+                legal: "GIFT City IFSCA Testbed"
+            },
+            {
+                name: "Propshare & RealX",
+                cat: "PropTech",
+                badge: "Real Estate Fractionalization",
+                badgeColor: "bg-indigo-100 text-indigo-800",
+                desc: "Early movers in domestic commercial property fractionalization testing onshore appetite while navigating SEBI CIS boundaries.",
+                tech: "Off-chain / Ethereum Ledger",
+                legal: "Private Limited SPV Structure"
+            },
+            {
+                name: "InfraLedger Labs",
+                cat: "Protocol",
+                badge: "Platform Engineering",
+                badgeColor: "bg-purple-100 text-purple-800",
+                desc: "Engineering compliant tokenized securities infrastructure explicitly tailored for the GIFT City regulatory testbed.",
+                tech: "ERC-3643 / Modular Smart Contracts",
+                legal: "IFSCA Sandbox Guidelines"
+            },
+            {
+                name: "Escrowpay",
+                cat: "Settlement",
+                badge: "Cross-Border Escrow",
+                badgeColor: "bg-amber-100 text-amber-800",
+                desc: "Providing cross-border multi-currency escrow settlement layers for tokenized asset transactions supporting 14+ fiat currencies.",
+                tech: "API Escrow / Blockchain Rails",
+                legal: "RBI Authorized PA-P Framework"
+            }
+        ];
+
+        let activeCat = "All";
+
+        // Chart References
+        let evmChartInstance = null;
+        let indiaChartInstance = null;
+        let globalChartInstance = null;
+
+        // Initialize Application
+        document.addEventListener("DOMContentLoaded", function() {
+            renderCompanies();
+            initCharts();
+            updateGasCalc();
+            calcGiftYield();
+            evaluateCompliance();
+            calcVcModel();
+        });
+
+        // Tab Switching Handler
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('tab-active'));
+            document.getElementById(`tab-${tabId}`).classList.add('tab-active');
+
+            ['evm', 'india', 'landscape', 'regulatory', 'funding', 'global'].forEach(p => {
+                document.getElementById(`panel-${p}`).classList.add('hidden');
+            });
+            document.getElementById(`panel-${tabId}`).classList.remove('hidden');
+        }
+
+        // Company Filtering Logic
+        function renderCompanies() {
+            const grid = document.getElementById('company-grid');
+            const search = document.getElementById('company-search').value.toLowerCase();
+            grid.innerHTML = '';
+
+            const filtered = companyData.filter(c => {
+                const matchesCat = (activeCat === 'All' || c.cat === activeCat);
+                const matchesSearch = c.name.toLowerCase().includes(search) || 
+                                      c.desc.toLowerCase().includes(search) || 
+                                      c.tech.toLowerCase().includes(search);
+                return matchesCat && matchesSearch;
+            });
+
+            if(filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-3 text-center py-8 text-slate-500 text-xs">No matching entities found.</div>`;
+                return;
+            }
+
+            filtered.forEach(c => {
+                const card = document.createElement('div');
+                card.className = "bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between";
+                card.innerHTML = `
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <h3 class="text-base font-bold text-slate-900">${c.name}</h3>
+                            <span class="text-[10px] font-bold px-2 py-0.5 rounded ${c.badgeColor}">${c.badge}</span>
+                        </div>
+                        <p class="text-xs text-slate-600 mb-3 leading-relaxed">${c.desc}</p>
+                    </div>
+                    <div class="pt-3 border-t border-slate-100 text-[11px] space-y-1 font-mono">
+                        <div class="text-slate-500"><strong class="text-slate-700">Tech Stack:</strong> ${c.tech}</div>
+                        <div class="text-slate-500"><strong class="text-slate-700">Legal Framing:</strong> ${c.legal}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterCategory(cat) {
+            activeCat = cat;
+            document.querySelectorAll('.company-cat-btn').forEach(btn => {
+                btn.className = "company-cat-btn text-xs px-3 py-1.5 rounded-lg border border-slate-300 bg-white text-slate-700 hover:bg-slate-50";
+            });
+            event.target.className = "company-cat-btn text-xs px-3 py-1.5 rounded-lg border border-emerald-600 bg-emerald-600 text-white font-medium";
+            renderCompanies();
+        }
+
+        function filterCompanies() {
+            renderCompanies();
+        }
+
+        // EVM Gas Calculator Handler
+        function updateGasCalc() {
+            const claims = parseInt(document.getElementById('claim-count').value);
+            document.getElementById('claim-count-val').innerText = `${claims} Claim${claims > 1 ? 's' : ''}`;
+
+            const strategy = document.getElementById('gas-strategy').value;
+            let lookupGas = 0;
+            let rulesGas = 5000;
+
+            if (strategy === 'unoptimized') {
+                lookupGas = claims * 4200; // 2 Cold SLOADs per claim
+            } else if (strategy === 'packed') {
+                lookupGas = claims * 2300;
+            } else { // assembly
+                lookupGas = claims * 1200; // Scratch memory cached
+            }
+
+            document.getElementById('calc-lookup-gas').innerText = lookupGas.toLocaleString();
+            document.getElementById('calc-rules-gas').innerText = rulesGas.toLocaleString();
+
+            const totalGas = 21000 + lookupGas + rulesGas;
+            const savings = (21000 + (claims * 4200) + 5000) - totalGas;
+
+            const note = document.getElementById('gas-efficiency-note');
+            if (strategy === 'assembly') {
+                note.innerText = `Assembly Caching saves approx ${savings.toLocaleString()} Gas per transfer vs Unoptimized Solidity!`;
+                note.className = "text-center text-xs text-emerald-700 bg-emerald-50 p-2 rounded border border-emerald-200 mt-2 font-mono";
+            } else if (strategy === 'packed') {
+                note.innerText = `Struct Packing saves approx ${savings.toLocaleString()} Gas per transfer vs Unoptimized Solidity.`;
+                note.className = "text-center text-xs text-indigo-700 bg-indigo-50 p-2 rounded border border-indigo-200 mt-2 font-mono";
+            } else {
+                note.innerText = `Unoptimized High-Level Solidity incurs maximum SLOAD execution fees.`;
+                note.className = "text-center text-xs text-red-700 bg-red-50 p-2 rounded border border-red-200 mt-2 font-mono";
+            }
+
+            if(evmChartInstance) {
+                evmChartInstance.data.datasets[0].data = [
+                    21000 + (claims * 4200) + 5000,
+                    21000 + (claims * 2300) + 5000,
+                    21000 + (claims * 1200) + 5000
+                ];
+                evmChartInstance.update();
+            }
+        }
+
+        // GIFT City Yield Calculator Handler
+        function calcGiftYield() {
+            const inv = parseFloat(document.getElementById('gift-inv-amount').value) || 100000;
+            const rate = parseFloat(document.getElementById('gift-yield-rate').value);
+            document.getElementById('gift-yield-rate-val').innerText = `${rate.toFixed(1)}%`;
+
+            const gross = inv * (rate / 100);
+            
+            // Onshore: 30% VDA Tax + 1% TDS on transaction
+            const onshoreTax = gross * 0.30;
+            const onshoreTds = inv * 0.01;
+            const onshoreNet = gross - onshoreTax;
+
+            // GIFT City: 0% Tax
+            const giftNet = gross;
+            const alpha = giftNet - onshoreNet;
+
+            document.getElementById('onshore-gross').innerText = `$${gross.toLocaleString()}`;
+            document.getElementById('onshore-tax').innerText = `-$${onshoreTax.toLocaleString()}`;
+            document.getElementById('onshore-tds').innerText = `-$${onshoreTds.toLocaleString()}`;
+            document.getElementById('onshore-net-payout').innerText = `$${onshoreNet.toLocaleString()}`;
+            document.getElementById('onshore-net-yield').innerText = `${((onshoreNet / inv) * 100).toFixed(1)}%`;
+
+            document.getElementById('gift-gross').innerText = `$${gross.toLocaleString()}`;
+            document.getElementById('gift-net-payout').innerText = `$${giftNet.toLocaleString()}`;
+            document.getElementById('gift-net-yield').innerText = `${rate.toFixed(1)}%`;
+            document.getElementById('gift-alpha').innerText = `+$${alpha.toLocaleString()} / yr`;
+        }
+
+        // SEBI CIS & Compliance Wizard Evaluator
+        function evaluateCompliance() {
+            const q1 = document.getElementById('cis-q1').value;
+            const q2 = document.getElementById('cis-q2').value;
+            const q3 = document.getElementById('cis-q3').value;
+            const q4 = document.getElementById('cis-q4').value;
+
+            const box = document.getElementById('compliance-result-box');
+            const level = document.getElementById('comp-risk-level');
+            const title = document.getElementById('comp-title');
+            const desc = document.getElementById('comp-desc');
+            const action = document.getElementById('comp-action');
+
+            if (q2 === 'direct') {
+                box.className = "p-5 rounded-lg border flex flex-col justify-between bg-red-50 border-red-300 text-red-900";
+                level.innerText = "Risk Level: CRITICAL SEBI CIS VIOLATION";
+                title.innerText = "High Risk of Illegal Pooling Classification";
+                desc.innerText = "Direct tokenization of physical land without corporate abstraction violates the Transfer of Property Act (1882) and triggers Section 11AA SEBI CIS prosecution.";
+                action.innerText = "&#10006; Immediate Action: Encapsulate assets into a Private Limited SPV or LLP before issuing tokens.";
+            } else if (q2 === 'gift') {
+                box.className = "p-5 rounded-lg border flex flex-col justify-between bg-emerald-50 border-emerald-300 text-emerald-900";
+                level.innerText = "Risk Level: LOW (IFSCA REGULATED)";
+                title.innerText = "Compliant Offshore GIFT City Framework";
+                desc.innerText = "Operating under IFSCA Fund Management Regulations (2025). Exempted from SEBI CIS jurisdiction and onshore overseas investment caps.";
+                action.innerText = "&#10004; Compliance Note: Maintain ONCHAINID AML/KYC checks for outbound fund investors.";
+            } else {
+                if (q4 === 'over100' && q3 !== 'debenture') {
+                    box.className = "p-5 rounded-lg border flex flex-col justify-between bg-amber-50 border-amber-300 text-amber-900";
+                    level.innerText = "Risk Level: HIGH (CRITICAL SEBI THRESHOLD)";
+                    title.innerText = "&#8377;100 Crore CIS Statutory Trigger";
+                    desc.innerText = "Unregistered pooling exceeding &#8377;100 Crores is automatically deemed a CIS under 2014 Legislative Amendments unless structured as a registered AIF.";
+                    action.innerText = "&#9888; Mandatory Action: Register platform as an AIF (Category II/III) or CIMC under SEBI.";
+                } else {
+                    box.className = "p-5 rounded-lg border flex flex-col justify-between bg-slate-100 border-slate-300 text-slate-900";
+                    level.innerText = "Risk Level: MODERATE SAFE HARBOR";
+                    title.innerText = "Valid SPV Debenture Structure";
+                    desc.innerText = "Tokens represent corporate debentures/shares in an SPV. Complies with Companies Act (2013) Private Placement limits.";
+                    action.innerText = "&#10004; Ensure tax counsel verifies security classification vs VDA Section 115BBH.";
+                }
+            }
+        }
+
+        // VC Model Simulator Handler
+        function calcVcModel() {
+            const vol = parseFloat(document.getElementById('vc-vol').value);
+            const feeBps = parseFloat(document.getElementById('vc-fee').value);
+            const secPct = parseFloat(document.getElementById('vc-sec').value);
+
+            document.getElementById('vc-vol-val').innerText = `$${vol}M`;
+            document.getElementById('vc-fee-val').innerText = `${feeBps} bps (${(feeBps/100).toFixed(2)}%)`;
+            document.getElementById('vc-sec-val').innerText = `${secPct}%`;
+
+            const originationRev = (vol * 1,000,000) * (feeBps / 10000);
+            const secondaryVol = (vol * 1,000,000) * (secPct / 100);
+            const secondaryRev = secondaryVol * (5 / 10000); // 5 bps protocol trading fee
+
+            const arr = originationRev + secondaryRev;
+            const valuation = arr * 15; // 15x ARR Multiple
+
+            document.getElementById('vc-orig-rev').innerText = `$${Math.round(originationRev).toLocaleString()}`;
+            document.getElementById('vc-sec-rev').innerText = `$${Math.round(secondaryRev).toLocaleString()}`;
+            document.getElementById('vc-arr-val').innerText = `$${Math.round(arr).toLocaleString()}`;
+            document.getElementById('vc-val-val').innerText = `$${(valuation / 1000000).toFixed(2)}M`;
+        }
+
+        // Initialize Chart.js Data Visualizations
+        function initCharts() {
+            // Chart 1: EVM Gas Comparison Bar Chart
+            const evmCtx = document.getElementById('evmGasChart').getContext('2d');
+            evmChartInstance = new Chart(evmCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['Unoptimized Solidity', 'Struct-Packed Solidity', 'Assembly Cached (0x00)'],
+                    datasets: [{
+                        label: 'Gas Cost per Regulated Transfer',
+                        data: [34400, 30600, 28400],
+                        backgroundColor: ['#f87171', '#818cf8', '#10b981'],
+                        borderRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` Gas: ${context.raw.toLocaleString()}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            title: { display: true, text: 'Gas Units', font: { size: 10 } }
+                        }
+                    }
+                }
+            });
+
+            // Chart 2: Indian RWA Market Projection Stacked Bar
+            const indiaCtx = document.getElementById('indiaMarketChart').getContext('2d');
+            indiaChartInstance = new Chart(indiaCtx, {
+                type: 'bar',
+                data: {
+                    labels: ['2025', '2026', '2027', '2028', '2029', '2030'],
+                    datasets: [
+                        { label: 'Agri eNWR Commodities', data: [0.8, 2.1, 4.5, 8.2, 12.5, 18.0], backgroundColor: '#10b981' },
+                        { label: 'Commercial Real Estate', data: [1.2, 3.5, 7.0, 12.4, 19.1, 28.5], backgroundColor: '#6366f1' },
+                        { label: 'Corporate Debt & Infra', data: [0.5, 1.8, 4.2, 8.0, 14.2, 22.1], backgroundColor: '#f59e0b' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } }
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, title: { display: true, text: '$ Billions USD', font: { size: 10 } } }
+                    }
+                }
+            });
+
+            // Chart 3: Global RWA Composition Donut Chart
+            const globalCtx = document.getElementById('globalRwaChart').getContext('2d');
+            globalChartInstance = new Chart(globalCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['US Treasuries & MMFs', 'Private Credit', 'Real Estate', 'Commodities & IoT', 'Aerospace & Maritime'],
+                    datasets: [{
+                        data: [13.4, 11.2, 6.5, 3.2, 1.97],
+                        backgroundColor: ['#10b981', '#6366f1', '#f59e0b', '#3b82f6', '#8b5cf6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 10 } } },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.label}: $${context.raw}B`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
