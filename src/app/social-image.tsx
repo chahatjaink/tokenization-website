@@ -1,3 +1,4 @@
+// Design source for public/og.png. LinkedIn fetches that static file.
 import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { ImageResponse } from "next/og";
